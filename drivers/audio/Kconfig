@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: Apache-2.0
+
+config AUDIO_DAC_ESP32
+	bool "ESP32 built-in DAC audio playback driver (I2S0 DMA)"
+	default y
+	depends on DT_HAS_ESPRESSIF_ESP32_DAC_AUDIO_ENABLED
+	depends on AUDIO_CODEC
+	depends on !ADC_ESP32_DMA
+	select DAC
+	help
+	  Plays 16-bit mono PCM on an ESP32 DAC channel (8-bit effective).
+	  I2S0 in built-in DAC mode paces the samples and its DMA feeds them,
+	  so I2S0 and ADC DMA mode cannot be used at the same time.
+
+config AUDIO_DAC_ESP32_MAX_BLOCK_SIZE
+	int "ESP32 DAC audio maximum block size in bytes"
+	default 512
+	range 4 4092
+	depends on AUDIO_DAC_ESP32
+	help
+	  Double buffering: RAM cost per instance is twice this value.
+	  Must be a multiple of 4 (one DMA word holds two samples).

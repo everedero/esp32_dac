@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: Apache-2.0
+
+manifest:
+  self:
+    path: esp32_dac
+
+  remotes:
+    - name: zephyrproject-rtos
+      url-base: https://github.com/zephyrproject-rtos
+
+  projects:
+    - name: zephyr
+      remote: zephyrproject-rtos
+      revision: v4.5.0
+      import:
+        name-allowlist:
+          - hal_espressif
+          - libsbc
+          - mbedtls
+          - tf-psa-crypto

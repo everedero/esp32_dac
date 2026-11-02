@@ -1,0 +1,26 @@
+/*
+ * Copyright (c) 2026 Eve Redero
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * DAC1 on GPIO25 -> 1 uF -> amp input (PAM8403/LM386), GND shared.
+ */
+
+/ {
+	aliases {
+		codec0 = &dac_audio0;
+		/* ponytail: alias + CONFIG_I2S only satisfy audio_buf.c's compile gate;
+		 * copy that file locally if it ever bites.
+		 */
+		i2s-codec-tx = &dac_audio0;
+	};
+
+	dac_audio0: dac-audio {
+		compatible = "espressif,esp32-dac-audio";
+		io-channels = <&dac 0>;		/* DAC_CHAN_0 = GPIO25 */
+		espressif,i2s = <&i2s0>;	/* stays disabled, driver owns it */
+	};
+};
+
+&dac {
+	status = "okay";
+};

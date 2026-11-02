@@ -1,0 +1,42 @@
+/*
+ * Copyright (c) 2026 Eve Redero
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Loopback: DAC1 on GPIO25 -> (270 R) -> ADC1_CH6 on GPIO34.
+ */
+
+#include <zephyr/dt-bindings/adc/adc.h>
+
+/ {
+	aliases {
+		codec0 = &dac_audio0;
+	};
+
+	dac_audio0: dac-audio {
+		compatible = "espressif,esp32-dac-audio";
+		io-channels = <&dac 0>;		/* DAC_CHAN_0 = GPIO25 */
+		espressif,i2s = <&i2s0>;	/* stays disabled, driver owns it */
+	};
+
+	zephyr,user {
+		io-channels = <&adc0 6>;	/* ADC1_CH6 = GPIO34 */
+	};
+};
+
+&dac {
+	status = "okay";
+};
+
+&adc0 {
+	status = "okay";
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	channel@6 {
+		reg = <6>;
+		zephyr,gain = "ADC_GAIN_1_4";	/* 11 dB attenuation, ~0.15..2.45 V */
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+};

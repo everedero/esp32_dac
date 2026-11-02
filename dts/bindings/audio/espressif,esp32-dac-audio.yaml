@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  PCM audio playback on an ESP32 built-in DAC channel, streamed by the I2S0
+  DMA in built-in DAC mode (the I2S WS clock paces the conversions).
+
+  The referenced I2S node must stay disabled: this driver owns its registers.
+
+compatible: "espressif,esp32-dac-audio"
+
+include: base.yaml
+
+properties:
+  io-channels:
+    type: phandle-array
+    required: true
+    description: DAC channel, <&dac 0> is GPIO25, <&dac 1> is GPIO26.
+
+  espressif,i2s:
+    type: phandle
+    required: true
+    description: I2S controller used as the DMA engine (only i2s0 can drive the DAC).
